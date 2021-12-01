@@ -1,4 +1,8 @@
 #!/usr/local/bin/fish
+# A fish script I use to prepare for a new day's challenges.
+# It currently just downloads the newest input file and generates templated
+# source files that import the prelude and read the input file.
+
 function for_part
     echo Creating solution files from template for part $argv[1]
     dump_template ./src/bin/day"$day""$argv[1]".rs
