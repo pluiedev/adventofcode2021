@@ -1,7 +1,7 @@
 use adventofcode2021::prelude::*;
 
 fn main() {
-    let input = include_str!("../inputs/input1.txt").split_whitespace();
+    let input = include_str!("../inputs/input1.txt").split_terminator('\n');
     
     dbg!(input
         .map(str::parse::<u32>)

@@ -17,7 +17,7 @@ function dump_template
 use adventofcode2021::prelude::*;
 
 fn main() {
-    let input = include_str!(\"../inputs/input$day.txt\").split_whitespace();
+    let input = include_str!(\"../inputs/input$day.txt\").split_terminator('\n');
     
     // code here
 }
