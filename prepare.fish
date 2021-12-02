@@ -30,7 +30,7 @@ echo Preparing solutions for Advent of Code 2021 Day $day\n
 for_part a
 for_part b
 
-set url https://adventofcode.com/2021/day/$day/input
-echo Downloading input file from $url
-curl $url > ./src/inputs/input"$day".txt
+# set url https://adventofcode.com/2021/day/$day/input
+# echo Downloading input file from $url
+# curl $url > ./src/inputs/input"$day".txt
 
