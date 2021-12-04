@@ -1,25 +1,23 @@
 use adventofcode2021::prelude::*;
 
 fn main() {
-    let input = include_str!("../inputs/input3.txt").split_terminator('\n');
-    
-    let (entries, occurences) = input.fold(
-        (0u32, vec![0u32; 0]),
-        |(mut entries, mut occurences), x| {
-            entries += 1;
-            let num = u32::from_str_radix(x, 2).unwrap();
-            occurences.resize(x.len(), 0);
+    let input = include_str!("../inputs/input3.txt")
+        .split_terminator('\n')
+        .collect_vec();
 
-            let mut mask = 1;
-            for occurence in &mut occurences {
-                if num & mask != 0 {
-                    *occurence += 1;
-                }
-                mask <<= 1;
+    let entries = input.len();
+
+    let occurences = input.iter().fold(vec![0usize; 0], |mut occurences, x| {
+        let num = u32::from_str_radix(x, 2).unwrap();
+        occurences.resize(x.len(), 0);
+
+        for (shift, occurence) in occurences.iter_mut().enumerate() {
+            if num.bit(shift) {
+                *occurence += 1;
             }
-            (entries, occurences)
-        },
-    );
+        }
+        occurences
+    });
     let (gamma, epsilon) =
         occurences
             .into_iter()
@@ -27,7 +25,8 @@ fn main() {
             .fold((0u32, 0u32), |(mut gamma, mut epsilon), occ| {
                 gamma <<= 1;
                 epsilon <<= 1;
-                if occ < (entries / 2) {
+                let remaining = entries - occ;
+                if occ < remaining {
                     gamma |= 1;
                 } else {
                     epsilon |= 1;

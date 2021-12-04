@@ -9,7 +9,7 @@ fn main() {
         .tuple_windows()
         .map(|(a, b, c)| a + b + c)
         .tuple_windows()
-        .map(|(ta, tb)| ta < tb)
+        .filter(|(ta, tb)| ta < tb)
         .count());
 }
 

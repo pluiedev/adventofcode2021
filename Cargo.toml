@@ -6,5 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+bit = "0.1.1"
 itertools = "0.10.1"
 petgraph = "0.6.0"
+
+[features]

@@ -1,6 +1,4 @@
 #![feature(array_chunks)]
-use std::collections::HashSet;
-
 use adventofcode2021::prelude::*;
 
 fn main() {
@@ -13,77 +11,76 @@ fn main() {
         .map(|x| x.parse::<u8>().unwrap())
         .collect_vec();
 
-    let mut bingoes = vec![];
-    for (_, bingo) in input.group_by(|l| l.is_empty()).into_iter().skip(1).step_by(2) {
-        let grid = bingo.fold(vec![], |mut v, x| {
-            dbg!(x);
-            v.extend(
-                x.split_ascii_whitespace()
-                    .map(|x| (false, x.parse::<u8>().unwrap())),
-            );
-            v
-        });
-        println!();
-        bingoes.push(Bingo { grid })
-    }
+    let mut bingoes = input
+        .group_by(|l| l.is_empty())
+        .into_iter()
+        .skip(1)
+        .step_by(2)
+        .map(|(_, bingo)| {
+            let grid = bingo.fold(vec![], |mut v, x| {
+                v.extend(
+                    x.split_ascii_whitespace()
+                        .map(|x| Some(x.parse::<u8>().unwrap())),
+                );
+                v
+            });
+            Bingo { grid }
+        })
+        .collect_vec();
 
     'top: for &n in &numbers {
         dbg!(n);
-        for (index, b) in bingoes.iter_mut().enumerate() {
-            let res = dbg!(b.update(n));
-            b.help();
-            match res {
-                Some(num) => {
-                    let summed = b.grid.iter()
-                        .filter(|(set, _)| !*set)
-                        .map(|(_, v)| *v as u32)
-                        .reduce(|acc, v| acc + v)
-                        .unwrap();
-                    dbg!(num as u32 * summed);
-                    break 'top;
-                }
-                None => {},
+        for b in bingoes.iter_mut() {
+            let res = b.update(n);
+            if let Some(num) = res {
+                let summed = b
+                    .grid
+                    .iter()
+                    .filter_map(|cell| cell.map(u32::from))
+                    .reduce(|acc, v| acc + v)
+                    .unwrap();
+                dbg!(num as u32 * summed);
+                break 'top;
             }
         }
     }
-
-    // dbg!(bingoes);
-    // code here
 }
 
 #[derive(Debug)]
 struct Bingo {
-    grid: Vec<(bool, u8)>,
+    grid: Vec<Option<u8>>,
 }
-
 
 impl Bingo {
     fn update(&mut self, n: u8) -> Option<u8> {
-        let pos = self.grid.iter_mut().position(|(set, val)| {
-            let b = *val == n;
-            if b {
-                *set = b;
+        let pos = self.grid.iter_mut().position(|val| {
+            if let Some(v) = val {
+                if *v == n {
+                    *val = None;
+                    return true;
+                }
             }
-            b
+            false
         })?;
-        
+
         let column = pos % 5;
         // row
         let row_start = pos - column;
         let row_end = row_start + 5;
-        if self.grid[row_start..row_end].iter().all(|(set, _)| *set) {
+        // perhaps confusingly, `None` indicates that the cell has been marked.
+        if self.grid[row_start..row_end].iter().all(Option::is_none) {
             return Some(n);
         }
         // column
-        if self.grid.iter().skip(column).step_by(5).all(|(set, _)| *set) {
+        if self
+            .grid
+            .iter()
+            .skip(column)
+            .step_by(5)
+            .all(Option::is_none)
+        {
             return Some(n);
         }
         None
-    }
-    fn help(&self) {
-        for a in self.grid.chunks_exact(5) {
-            println!("{:?}", a);
-        }
-        println!()
     }
 }

@@ -29,32 +29,26 @@ fn main() {
 
     let count_bingoes = bingoes.len();
     let mut completed_bingoes = HashSet::new();
+    
     'top: for &n in &numbers {
         dbg!(n);
         for (index, b) in bingoes.iter_mut().enumerate() {
-            let res = dbg!(b.update(n));
-            b.help();
-            match res {
-                Some(num) => {
-                    let summed = b.grid.iter()
-                        .filter(|(set, _)| !*set)
-                        .map(|(_, v)| *v as u32)
-                        .reduce(|acc, v| acc + v)
-                        .unwrap_or(0);
-                    
-                    completed_bingoes.insert(index);
-                    if completed_bingoes.len() == count_bingoes {
-                        dbg!(num as u32 * summed);
-                        break 'top;
-                    }
+            let res = b.update(n);
+            if let Some(num) = res {
+                let summed = b.grid.iter()
+                    .filter(|(set, _)| !*set)
+                    .map(|(_, v)| *v as u32)
+                    .reduce(|acc, v| acc + v)
+                    .unwrap_or(0);
+                
+                completed_bingoes.insert(index);
+                if completed_bingoes.len() == count_bingoes {
+                    dbg!(num as u32 * summed);
+                    break 'top;
                 }
-                None => {},
             }
         }
     }
-
-    // dbg!(bingoes);
-    // code here
 }
 
 #[derive(Debug)]
@@ -85,11 +79,5 @@ impl Bingo {
             return Some(n);
         }
         None
-    }
-    fn help(&self) {
-        for a in self.grid.chunks_exact(5) {
-            println!("{:?}", a);
-        }
-        println!()
     }
 }
