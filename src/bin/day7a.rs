@@ -1,3 +1,4 @@
+#![feature(int_abs_diff)]
 use adventofcode2021::prelude::*;
 
 fn main() {
@@ -6,13 +7,13 @@ fn main() {
     let inputs = input
         .trim()
         .split(',')
-        .map(|x| x.parse::<i16>().unwrap())
+        .map(|x| x.parse::<u64>().unwrap())
         .sorted()
         .collect_vec();
     let median = inputs[inputs.len() / 2];
     let fuel = inputs
         .into_iter()
-        .fold(0u64, |acc, ele| acc + (ele - median).abs() as u64);
+        .fold(0u64, |acc, ele| acc + ele.abs_diff(median));
     dbg!(fuel);
 
     // code here
