@@ -7,7 +7,11 @@ edition = "2021"
 
 [dependencies]
 bit = "0.1.1"
+geo = "0.18.0"
 itertools = "0.10.1"
+line_intersection = "0.4.0"
+nom = "7.1.0"
 petgraph = "0.6.0"
+rayon = "1.5.1"
 
 [features]
