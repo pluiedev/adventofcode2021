@@ -1,17 +1,16 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use adventofcode2021::prelude::*;
 
 fn main() {
     let input = include_str!("../inputs/input8.txt").lines();
 
-    let count = input.fold(0, |mut acc, s| {
+    let count = input.fold(0, |acc, s| {
         let (digits, output) = s.split_once(" | ").unwrap();
         // analysis
         let digits = digits
             .split_ascii_whitespace()
             .map(|s| {
-                dbg!(s);
                 let ss = s
                     .bytes()
                     .fold(SevenSeg::empty(), |acc, b| acc | SevenSeg::from_ch(b));
@@ -20,7 +19,6 @@ fn main() {
             .sorted_by_key(|(len, _)| *len)
             .map(|(_, ss)| ss)
             .collect_vec();
-        dbg!(&digits);
 
         // special numbers and ranges
         let one = digits[0];
@@ -60,8 +58,6 @@ fn main() {
         let c = seven - f - a;
         let e = eight - nine;
 
-        dbg!((a, b, c, d, e, f, g));
-
         let three = five - b | c;
         let two = three - f | e;
         let six = five | e;
@@ -77,10 +73,12 @@ fn main() {
             (eight, 8),
             (nine, 9),
         ]);
+        let a = 'a';
+        let b = 'b';
+        let af = HashSet::from([a, b]);
         // decode
         let mut total = 0;
         for digit in output.split_ascii_whitespace() {
-            dbg!(acc);
             total *= 10;
             let ss = digit
                 .bytes()
