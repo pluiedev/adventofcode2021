@@ -1,4 +1,4 @@
-use std::{fmt::Debug, collections::VecDeque};
+use std::{collections::VecDeque, fmt::Debug};
 
 fn main() {
     let input = include_str!("../inputs/input10.txt").lines();
@@ -17,7 +17,7 @@ fn main() {
                     '[' => 2,
                     '{' => 3,
                     '<' => 4,
-                    _ => unreachable!()
+                    _ => unreachable!(),
                 };
                 score = score * 5 + pt;
             }
