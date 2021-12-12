@@ -2,3 +2,4 @@
 
 pub use itertools::Itertools;
 pub use bit::*;
+pub use petgraph::prelude::*;
