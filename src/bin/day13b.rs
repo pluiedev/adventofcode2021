@@ -53,6 +53,6 @@ fn main() {
     // print
     println!("{}", clear::All);
     for (x, y) in set {
-        println!("{}#", cursor::Goto(x + 1, y + 1));
+        println!("{}\u{2588}", cursor::Goto(x + 1, y + 1));
     }
 }
