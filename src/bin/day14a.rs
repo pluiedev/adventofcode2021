@@ -1,5 +1,5 @@
 #![feature(array_windows)]
-use std::collections::{LinkedList, HashSet, BTreeSet};
+use std::collections::BTreeSet;
 
 use adventofcode2021::prelude::*;
 use itertools::MinMaxResult;
@@ -23,21 +23,23 @@ fn main() {
         .collect_vec();
 
     for i in 0..10 {
-        let mut new_chars = BTreeSet::new();
+        let mut new_chars = vec![];
         for rule in &rules {
             // println!("{:?}", rule);
             for (pos, (a, b)) in polymer.iter().tuple_windows().enumerate() {
                 if *a == rule.first && *b == rule.second {
                     // println!("{}, {}", pos, rule.target);
-                    new_chars.insert((pos + 1, rule.target));
+                    new_chars.push((pos + 1, rule.target));
                 }
             }
         }
+        new_chars.sort_by(|a, b| b.cmp(a));
+
         // println!("{:?}", new_chars);
-        for (pos, nc) in new_chars.into_iter().rev() {
+        for (pos, nc) in new_chars {
             polymer.insert(pos, nc);
         }
-        // println!("i={}, {:?}", i, polymer);
+        println!("i={}", i);
     }
     let cnts = polymer.into_iter().counts();
     dbg!(&cnts);
